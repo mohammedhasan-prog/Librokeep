@@ -1,12 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import styles from "./App.module.css";
-import { fetchBooks } from "./services/api";
-
-const coverPool = [
-  "https://lh3.googleusercontent.com/aida-public/AB6AXuAdGbHFeUpF3AdLZFGcWZU3-H6mpvmlq5L5r2dbnOXQi3iEovvKKtqr5VPfQ2KALLbFc9Wpdt6ATZLbyBEe_YGTMlnrIzQb-f12Y57wBKAg-SpBou6K8DrsgeIkm3e2YyCcPFza1wvTBQ04yxgaopmlN8Kt9YG-ww7pQ52x6YkE6Zn1NgFGEV3hh-CMiMQ9FWTNelGaPMPTjjcFD7d2a6AR2I_cABJUw3uewesCra_Bql5Fd_E7iZ6EC4bK2ji9Te3Q1icAqGbeTMYT",
-  "https://lh3.googleusercontent.com/aida-public/AB6AXuDn1OHOAQreBYIFk2ePoFnYQKHnPyA1tz91ao7dPhJiqtV6fZgtiRXHud5eCuNwN2WpgSEtchIGfv7zBrz1LhyXEAELkKQ0G_eTHeLLhDZP5dw7se2Jq-WZ4AZRazbU1t6hfelCl-R1WdAsuazqEH9z662mWNn6TtlQB_e-zRDE6syNhbQBURbsaA1wMzV2wO_ct5TBJgA8F2uvOKi9f0PpTxM08R2qH-uzAjmvSt19LWUrtpCVsTfiScZPrtHRfUyVSmDBvyk2uaKP",
-  "https://lh3.googleusercontent.com/aida-public/AB6AXuB_vRRvxpwmASydU-pYDIZWO7nElTzRBHqN70g6uMgkGXp_eQMNP_GLqXweMPiIvxt5zLHto75YmHUii11TBg7CpOC2fipOfMOJr_NKHgLPothr0oZ8bXD_SI_aXGAKRPz967LZNBN6-_EvGneFO8ArmZK_fcWj-fvYW8zrLA-i8s8sXhj_8tLbBHbSUYi18G8eeg_lGvDHn8PWTavGyKmBCCtQr8k5Ln2hq8kipog3sO3cugocsDLEas4WtE5OaJ79La1igk2-VM5R",
-];
+import { fetchBooks, createBook, deleteBook } from "./services/api";
 
 const loans = [
   {
@@ -84,13 +78,49 @@ function App() {
 
   const acquisitions = useMemo(
     () =>
-      books.slice(0, 3).map((book, index) => ({
+      books.map((book) => ({
         ...book,
-        status: index % 2 === 0 ? "Available" : "Borrowed",
-        cover: coverPool[index % coverPool.length],
+        status: "Available",
+        cover: book.coverImage || "https://placehold.co/400x600?text=No+Cover",
       })),
     [books]
   );
+
+  const handleAddBook = async (e) => {
+    e.preventDefault();
+    const formData = new FormData(e.target);
+    try {
+      setBooksLoading(true);
+      await createBook(formData);
+      setModalOpen(false);
+      const payload = await fetchBooks({ page: 1, limit: 12 });
+      const data = payload.data || payload;
+      setBooks(data);
+      setTotalBooks(payload.pagination?.total ?? data.length);
+    } catch (error) {
+      console.error(error);
+      alert("Failed to add book");
+    } finally {
+      setBooksLoading(false);
+    }
+  };
+
+  const handleDeleteBook = async (id) => {
+    if (!window.confirm("Are you sure you want to delete this book?")) return;
+    try {
+      setBooksLoading(true);
+      await deleteBook(id);
+      const payload = await fetchBooks({ page: 1, limit: 12 });
+      const data = payload.data || payload;
+      setBooks(data);
+      setTotalBooks(payload.pagination?.total ?? data.length);
+    } catch (error) {
+      console.error(error);
+      alert("Failed to delete book");
+    } finally {
+      setBooksLoading(false);
+    }
+  };
 
   useEffect(() => {
     let isMounted = true;
@@ -263,21 +293,25 @@ function App() {
                         <img src={book.cover} alt={`${book.title} cover`} />
                       </div>
                       <div className={styles.bookMeta}>
-                        <div>
-                          <h3>{book.title}</h3>
-                          <p>{book.author}</p>
+                        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
+                          <div>
+                            <h3>{book.title}</h3>
+                            <p>{book.author}</p>
+                          </div>
+                          <button 
+                            className={styles.ghostButton} 
+                            onClick={() => handleDeleteBook(book._id)}
+                            style={{ color: 'var(--color-rose-600)', padding: '4px' }}
+                            title="Delete Book"
+                          >
+                            <span className="material-symbols-outlined" style={{ fontSize: '18px' }}>delete</span>
+                          </button>
                         </div>
                         <div className={styles.badgeRow}>
                           <span className={styles.badgeNeutral}>
                             {book.genre}
                           </span>
-                          <span
-                            className={
-                              book.status === "Available"
-                                ? styles.badgeAvailable
-                                : styles.badgeBorrowed
-                            }
-                          >
+                          <span className={styles.badgeAvailable}>
                             {book.status}
                           </span>
                         </div>
@@ -356,7 +390,7 @@ function App() {
 
       {modalOpen && (
         <div className={styles.modalOverlay} role="dialog" aria-modal="true">
-          <div className={styles.modalCard}>
+          <form className={styles.modalCard} onSubmit={handleAddBook}>
             <header>
               <h2>Add New Book</h2>
               <button type="button" onClick={() => setModalOpen(false)}>
@@ -370,17 +404,18 @@ function App() {
                 <div className={styles.formGrid}>
                   <label>
                     Title*
-                    <input type="text" placeholder="Enter full book title" />
+                    <input type="text" name="title" required placeholder="Enter full book title" />
                   </label>
                   <label>
                     Author*
-                    <input type="text" placeholder="Primary author" />
+                    <input type="text" name="author" required placeholder="Primary author" />
                   </label>
                   <label>
                     ISBN-13
                     <div className={styles.iconInput}>
                       <input
                         type="text"
+                        name="isbn"
                         placeholder="e.g., 978-0-123456-47-2"
                       />
                       <span className="material-symbols-outlined">
@@ -389,8 +424,8 @@ function App() {
                     </div>
                   </label>
                   <label>
-                    Publication Year
-                    <input type="number" placeholder="YYYY" />
+                    Publication Year*
+                    <input type="number" name="publicationYear" required placeholder="YYYY" />
                   </label>
                 </div>
               </section>
@@ -399,25 +434,25 @@ function App() {
                 <h3>Classification</h3>
                 <div className={styles.formGrid}>
                   <label>
-                    Genre
-                    <select defaultValue="">
+                    Genre*
+                    <select name="genre" required defaultValue="">
                       <option value="" disabled>
                         Select a genre
                       </option>
-                      <option>Fiction</option>
-                      <option>Non-fiction</option>
-                      <option>Sci-Fi</option>
-                      <option>History</option>
-                      <option>Biography</option>
+                      <option value="Fiction">Fiction</option>
+                      <option value="Non-fiction">Non-fiction</option>
+                      <option value="Sci-Fi">Sci-Fi</option>
+                      <option value="History">History</option>
+                      <option value="Biography">Biography</option>
                     </select>
                   </label>
                   <label>
                     Language
-                    <select defaultValue="English">
-                      <option>English</option>
-                      <option>Spanish</option>
-                      <option>French</option>
-                      <option>German</option>
+                    <select name="language" defaultValue="English">
+                      <option value="English">English</option>
+                      <option value="Spanish">Spanish</option>
+                      <option value="French">French</option>
+                      <option value="German">German</option>
                     </select>
                   </label>
                 </div>
@@ -429,11 +464,11 @@ function App() {
                   <div className={styles.formGrid}>
                     <label>
                       Copies
-                      <input type="number" min="1" defaultValue="1" />
+                      <input type="number" name="copies" min="1" defaultValue="1" />
                     </label>
                     <label>
                       Location / Shelf
-                      <input type="text" placeholder="e.g., A4-Top" />
+                      <input type="text" name="location" placeholder="e.g., A4-Top" />
                     </label>
                   </div>
                 </section>
@@ -442,11 +477,11 @@ function App() {
                   <h3>Status</h3>
                   <div className={styles.statusRow}>
                     <label>
-                      <input type="radio" name="status" defaultChecked />
+                      <input type="radio" name="status" value="Available" defaultChecked />
                       <span>Available</span>
                     </label>
                     <label>
-                      <input type="radio" name="status" />
+                      <input type="radio" name="status" value="In Processing" />
                       <span>In Processing</span>
                     </label>
                   </div>
@@ -456,7 +491,7 @@ function App() {
               <section>
                 <h3>Cover Image</h3>
                 <label className={styles.uploadBox}>
-                  <input type="file" accept="image/*" />
+                  <input type="file" name="coverImage" accept="image/*" />
                   <span className="material-symbols-outlined">cloud_upload</span>
                   <strong>Click to upload or drag and drop</strong>
                   <small>SVG, PNG, JPG or GIF (max. 800x400px)</small>
@@ -472,12 +507,12 @@ function App() {
               >
                 Cancel
               </button>
-              <button type="button" className={styles.primaryButton}>
+              <button type="submit" className={styles.primaryButton}>
                 <span className="material-symbols-outlined">add_circle</span>
                 Add to Collection
               </button>
             </footer>
-          </div>
+          </form>
         </div>
       )}
     </div>

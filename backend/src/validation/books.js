@@ -10,6 +10,7 @@ const createBookSchema = z.object({
     z.string().min(1, "Publication year is required"),
     z.number(),
   ]),
+  coverImage: z.string().url().optional(),
 });
 
 const updateBookSchema = createBookSchema;
@@ -20,6 +21,7 @@ const patchBookSchema = z
     author: z.string().min(1).optional(),
     genre: z.string().min(1).optional(),
     publicationYear: z.union([z.string().min(1), z.number()]).optional(),
+    coverImage: z.string().url().optional(),
   })
   .refine((data) => Object.keys(data).length > 0, {
     message: "At least one field is required",

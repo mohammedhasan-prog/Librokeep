@@ -11,3 +11,38 @@ export const fetchBooks = async ({ page = 1, limit = 12 } = {}) => {
 
   return response.json();
 };
+
+export const createBook = async (formData) => {
+  const response = await fetch(`${API_BASE}/books`, {
+    method: "POST",
+    body: formData,
+  });
+
+  if (!response.ok) {
+    throw new Error("Failed to create book");
+  }
+  return response.json();
+};
+
+export const updateBook = async (id, formData) => {
+  const response = await fetch(`${API_BASE}/books/${id}`, {
+    method: "PUT",
+    body: formData,
+  });
+
+  if (!response.ok) {
+    throw new Error("Failed to update book");
+  }
+  return response.json();
+};
+
+export const deleteBook = async (id) => {
+  const response = await fetch(`${API_BASE}/books/${id}`, {
+    method: "DELETE",
+  });
+
+  if (!response.ok) {
+    throw new Error("Failed to delete book");
+  }
+  return;
+};

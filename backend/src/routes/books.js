@@ -1,5 +1,6 @@
 const express = require("express");
 const Book = require("../models/Book");
+const upload = require("../middleware/upload");
 const {
   createBookSchema,
   updateBookSchema,
@@ -75,19 +76,37 @@ router.get(
   }
 );
 
-router.post("/", validateBody(createBookSchema), async (req, res, next) => {
-  try {
-    const book = await Book.create(req.body);
+router.post(
+  "/",
+  upload.single("coverImage"),
+  (req, res, next) => {
+    if (req.file) {
+      req.body.coverImage = req.file.path;
+    }
+    next();
+  },
+  validateBody(createBookSchema),
+  async (req, res, next) => {
+    try {
+      const book = await Book.create(req.body);
 
-    res.status(201).json(book);
-  } catch (err) {
-    next(err);
+      res.status(201).json(book);
+    } catch (err) {
+      next(err);
+    }
   }
-});
+);
 
 router.put(
   "/:id",
+  upload.single("coverImage"),
   validateParams(bookIdParamsSchema),
+  (req, res, next) => {
+    if (req.file) {
+      req.body.coverImage = req.file.path;
+    }
+    next();
+  },
   validateBody(updateBookSchema),
   async (req, res, next) => {
   try {
@@ -110,7 +129,14 @@ router.put(
 
 router.patch(
   "/:id",
+  upload.single("coverImage"),
   validateParams(bookIdParamsSchema),
+  (req, res, next) => {
+    if (req.file) {
+      req.body.coverImage = req.file.path;
+    }
+    next();
+  },
   validateBody(patchBookSchema),
   async (req, res, next) => {
   try {
