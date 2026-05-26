@@ -3,6 +3,7 @@ const notFound = (req, res, next) => {
 };
 
 const errorHandler = (err, req, res, next) => {
+  console.error("DEBUG ERROR:", err);
   const isCastError = err && err.name === "CastError";
 
   if (isCastError) {

@@ -1,40 +1,17 @@
 import { useEffect, useMemo, useState } from "react";
 import styles from "./App.module.css";
 import { fetchBooks, createBook, deleteBook, fetchMembers, fetchLoans } from "./services/api";
-  {
-    title: "1984",
-    author: "George Orwell",
-    borrower: "Sarah Jenkins",
-    due: "Oct 12, 2023",
-    status: "Overdue",
-  },
-  {
-    title: "Sapiens",
-    author: "Yuval Noah Harari",
-    borrower: "Michael Chang",
-    due: "Oct 28, 2023",
-    status: "Borrowed",
-  },
-  {
-    title: "The Design of...",
-    author: "Don Norman",
-    borrower: "Emma Wilson",
-    due: "Nov 02, 2023",
-    status: "Borrowed",
-  },
-  {
-    title: "To Kill a...",
-    author: "Harper Lee",
-    borrower: "David Kim",
-    due: "Oct 20, 2023",
-    status: "Returned",
+
 function App() {
   const [modalOpen, setModalOpen] = useState(false);
   const [books, setBooks] = useState([]);
   const [members, setMembers] = useState([]);
   const [loans, setLoans] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState("");
+  const [searchQuery, setSearchQuery] = useState("");
+  const [loanFilterStatus, setLoanFilterStatus] = useState("All");
   const [totalBooks, setTotalBooks] = useState(0);
   const dateLabel = useMemo(() => {
     const hours = new Date().getHours();
@@ -73,29 +50,43 @@ function App() {
     [totalBooks, loans, members]
   );
 
-  const acquisitions = useMemo(
-    () =>
-      books.map((book) => ({
-        ...book,
-        status: "Available",
-        cover: book.coverImage || "https://placehold.co/400x600?text=No+Cover",
-      })),
-    [books]
-  );
+  const acquisitions = useMemo(() => {
+    let filtered = books;
+    if (searchQuery.trim()) {
+      const q = searchQuery.toLowerCase();
+      filtered = filtered.filter(
+        (b) =>
+          b.title?.toLowerCase().includes(q) ||
+          b.author?.toLowerCase().includes(q)
+      );
+    }
+    return filtered.map((book) => ({
+      ...book,
+      status: "Available",
+      cover: book.coverImage || "https://placehold.co/400x600?text=No+Cover",
+    }));
+  }, [books, searchQuery]);
 
   const handleAddBook = async (e) => {
     e.preventDefault();
     const formData = new FormData(e.target);
+    
+    // Prevent sending empty file which causes Cloudinary to throw a 500 error
+    const file = formData.get("coverImage");
+    if (file && file.size === 0) {
+      formData.delete("coverImage");
+    }
+
     try {
-      setLoading(true);
+      setIsSubmitting(true);
       await createBook(formData);
       setModalOpen(false);
       await loadData();
     } catch (error) {
       console.error(error);
-      alert("Failed to add book");
+      alert(`Error: ${error.message}`);
     } finally {
-      setLoading(false);
+      setIsSubmitting(false);
     }
   };
 
@@ -165,22 +156,6 @@ function App() {
             <span className="material-symbols-outlined">dashboard</span>
             Dashboard
           </button>
-          <button className={styles.navItem}>
-            <span className="material-symbols-outlined">menu_book</span>
-            My Books
-          </button>
-          <button className={styles.navItem}>
-            <span className="material-symbols-outlined">swap_horiz</span>
-            Borrowed/Lending
-          </button>
-          <button className={styles.navItem}>
-            <span className="material-symbols-outlined">group</span>
-            Members
-          </button>
-          <button className={styles.navItem}>
-            <span className="material-symbols-outlined">settings</span>
-            Settings
-          </button>
         </nav>
 
         <div className={styles.profileCard}>
@@ -209,14 +184,12 @@ function App() {
             <input
               type="text"
               placeholder="Search by title, author, or ISBN..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
             />
             <span className={styles.searchShortcut}>Ctrl K</span>
           </div>
           <div className={styles.topActions}>
-            <button className={styles.iconButton} type="button">
-              <span className="material-symbols-outlined">notifications</span>
-              <span className={styles.notificationDot} />
-            </button>
             <button
               className={styles.primaryButton}
               type="button"
@@ -267,9 +240,6 @@ function App() {
             <div className={styles.acquisitions}>
               <div className={styles.sectionHeader}>
                 <h2>Recent Acquisitions</h2>
-                <button className={styles.viewAll} type="button">
-                  View all {"->"}
-                </button>
               </div>
               <div className={styles.bookGrid}>
                 {loading && (
@@ -319,15 +289,28 @@ function App() {
 
             <div className={styles.loans}>
               <div className={styles.sectionHeader}>
-                <h2>Active Loans</h2>
+                <h2>
+                  Active Loans
+                  {loanFilterStatus !== "All" && (
+                    <span style={{ fontSize: "14px", marginLeft: "12px", color: "var(--color-slate-500)", fontWeight: "normal" }}>
+                      Filtering by: {loanFilterStatus}
+                    </span>
+                  )}
+                </h2>
                 <div className={styles.sectionActions}>
-                  <button className={styles.iconButton} type="button">
+                  <button 
+                    className={styles.iconButton} 
+                    type="button" 
+                    title="Filter Status"
+                    onClick={() => {
+                      const statuses = ["All", "Borrowed", "Overdue", "Returned"];
+                      const nextIndex = (statuses.indexOf(loanFilterStatus) + 1) % statuses.length;
+                      setLoanFilterStatus(statuses[nextIndex]);
+                    }}
+                  >
                     <span className="material-symbols-outlined">
                       filter_list
                     </span>
-                  </button>
-                  <button className={styles.iconButton} type="button">
-                    <span className="material-symbols-outlined">more_vert</span>
                   </button>
                 </div>
               </div>
@@ -339,11 +322,12 @@ function App() {
                       <th>Borrower</th>
                       <th>Due Date</th>
                       <th>Status</th>
-                      <th>Action</th>
                     </tr>
                   </thead>
                   <tbody>
-                    {loans.map((loan) => (
+                    {loans
+                      .filter(loan => loanFilterStatus === "All" || loan.status === loanFilterStatus)
+                      .map((loan) => (
                       <tr key={loan._id}>
                         <td>
                           <div className={styles.titleCell}>
@@ -365,14 +349,6 @@ function App() {
                           >
                             {loan.status}
                           </span>
-                        </td>
-                        <td>
-                          <button
-                            className={styles.ghostButton}
-                            type="button"
-                          >
-                            {loan.status === "Overdue" ? "Remind" : "View"}
-                          </button>
                         </td>
                       </tr>
                     ))}
@@ -503,9 +479,18 @@ function App() {
               >
                 Cancel
               </button>
-              <button type="submit" className={styles.primaryButton}>
-                <span className="material-symbols-outlined">add_circle</span>
-                Add to Collection
+              <button type="submit" className={styles.primaryButton} disabled={isSubmitting}>
+                {isSubmitting ? (
+                  <>
+                    <span className="material-symbols-outlined" style={{ animation: "spin 1s linear infinite" }}>sync</span>
+                    Uploading...
+                  </>
+                ) : (
+                  <>
+                    <span className="material-symbols-outlined">add_circle</span>
+                    Add to Collection
+                  </>
+                )}
               </button>
             </footer>
           </form>

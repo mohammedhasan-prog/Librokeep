@@ -19,7 +19,12 @@ export const createBook = async (formData) => {
   });
 
   if (!response.ok) {
-    throw new Error("Failed to create book");
+    let errMessage = "Failed to create book";
+    try {
+      const data = await response.json();
+      if (data.message) errMessage = data.message;
+    } catch (e) {}
+    throw new Error(errMessage);
   }
   return response.json();
 };
