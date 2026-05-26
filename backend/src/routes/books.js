@@ -19,6 +19,24 @@ router.get("/", async (req, res, next) => {
   }
 });
 
+router.get(
+  "/:id",
+  validateParams(bookIdParamsSchema),
+  async (req, res, next) => {
+    try {
+      const book = await Book.findById(req.params.id);
+
+      if (!book) {
+        return res.status(404).json({ message: "Book not found" });
+      }
+
+      res.status(200).json(book);
+    } catch (err) {
+      next(err);
+    }
+  }
+);
+
 router.post("/", validateBody(createBookSchema), async (req, res, next) => {
   try {
     const book = await Book.create(req.body);
