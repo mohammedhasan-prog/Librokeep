@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>LibroKeep - Add New Book</title>
+<!-- Fonts & Icons -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Theme Configuration -->
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "on-secondary": "#ffffff",
+                    "surface-tint": "#006c49",
+                    "secondary-container": "#6063ee",
+                    "primary": "#006c49",
+                    "surface-variant": "#d3e4fe",
+                    "on-error-container": "#93000a",
+                    "surface-bright": "#f8f9ff",
+                    "outline-variant": "#bbcabf",
+                    "on-surface": "#0b1c30",
+                    "primary-fixed-dim": "#4edea3",
+                    "on-primary": "#ffffff",
+                    "surface-container-high": "#dce9ff",
+                    "on-primary-fixed-variant": "#005236",
+                    "surface-container-low": "#eff4ff",
+                    "surface": "#f8f9ff",
+                    "on-tertiary-fixed-variant": "#930013",
+                    "on-tertiary-container": "#79000e",
+                    "surface-container-highest": "#d3e4fe",
+                    "tertiary-fixed-dim": "#ffb3ad",
+                    "tertiary-container": "#ff7a73",
+                    "on-primary-fixed": "#002113",
+                    "primary-fixed": "#6ffbbe",
+                    "on-tertiary": "#ffffff",
+                    "on-secondary-fixed-variant": "#2f2ebe",
+                    "background": "#f8f9ff",
+                    "primary-container": "#10b981",
+                    "surface-container": "#e5eeff",
+                    "on-secondary-fixed": "#07006c",
+                    "error-container": "#ffdad6",
+                    "on-tertiary-fixed": "#410004",
+                    "inverse-surface": "#213145",
+                    "surface-container-lowest": "#ffffff",
+                    "inverse-on-surface": "#eaf1ff",
+                    "secondary": "#4648d4",
+                    "surface-dim": "#cbdbf5",
+                    "error": "#ba1a1a",
+                    "tertiary": "#b91a24",
+                    "secondary-fixed": "#e1e0ff",
+                    "outline": "#6c7a71",
+                    "on-surface-variant": "#3c4a42",
+                    "tertiary-fixed": "#ffdad7",
+                    "on-secondary-container": "#fffbff",
+                    "inverse-primary": "#4edea3",
+                    "secondary-fixed-dim": "#c0c1ff",
+                    "on-primary-container": "#00422b",
+                    "on-error": "#ffffff",
+                    "on-background": "#0b1c30"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "md": "1rem",
+                    "lg": "1.5rem",
+                    "xs": "0.25rem",
+                    "margin-desktop": "2.5rem",
+                    "base": "4px",
+                    "xl": "2rem",
+                    "sm": "0.5rem",
+                    "margin-mobile": "1rem",
+                    "gutter": "1.5rem"
+            },
+            "fontFamily": {
+                    "body-md": ["Inter"],
+                    "label-sm": ["Inter"],
+                    "headline-md": ["Inter"],
+                    "body-sm": ["Inter"],
+                    "body-lg": ["Inter"],
+                    "headline-sm": ["Inter"],
+                    "display-lg": ["Inter"],
+                    "headline-lg": ["Inter"],
+                    "label-md": ["Inter"],
+                    "headline-lg-mobile": ["Inter"]
+            },
+            "fontSize": {
+                    "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "label-sm": ["12px", {"lineHeight": "16px", "fontWeight": "500"}],
+                    "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                    "body-sm": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                    "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                    "headline-sm": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+                    "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "headline-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                    "label-md": ["14px", {"lineHeight": "20px", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                    "headline-lg-mobile": ["24px", {"lineHeight": "32px", "fontWeight": "600"}]
+            }
+          }
+        }
+      }
+    </script>
+<style>
+        .input-base {
+            @apply w-full px-md py-sm bg-surface-container-lowest border border-outline-variant rounded-lg text-body-md font-body-md text-on-surface focus:outline-none focus:border-primary focus:ring-[3px] focus:ring-primary/10 transition-all duration-200 placeholder-on-surface-variant/50;
+        }
+        .label-base {
+            @apply font-label-md text-label-md text-on-surface block mb-sm;
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background font-body-md antialiased overflow-hidden">
+<!-- Background Layer with Blur -->
+<div class="fixed inset-0 z-0">
+<!-- Dashboard Background Image Placeholder -->
+<div class="absolute inset-0 bg-cover bg-center" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCp9g4w9WpGTMA-_45InmlefS_Jjs4YNVVbCbBXi96Fy1JJJs8by92ngYkqFKuTovwGnIC33WPKyD1qXPxwLxhXvehF8MRXGTvDErtbi5R3erxKRCcurUB9HOKXCZi3Um5xI5ETAgy6kiswp0-cN7RhU_HotHp6Ll72iqx-ub85Wsw7IrUS3gDSOgG2ybZFISSZlZPW_S7NB7ZbjBR6Nmxp_mlPGnIi9oTxW_abQ_AFHnxYoRj21D2ap2i489DIxJynOHVQGtqYyr8t');"></div>
+<!-- Overlay Darkening & Blur -->
+<div class="absolute inset-0 bg-inverse-surface/60 backdrop-blur-sm transition-opacity duration-300"></div>
+</div>
+<!-- Modal Container -->
+<div aria-labelledby="modal-title" aria-modal="true" class="fixed inset-0 z-50 flex items-center justify-center p-margin-mobile md:p-margin-desktop overflow-y-auto" role="dialog">
+<!-- Modal Card: Level 2 Elevation -->
+<div class="bg-surface-container-lowest w-full max-w-3xl rounded-xl shadow-[0_10px_30px_rgba(100,116,139,0.12)] border border-outline-variant flex flex-col max-h-[921px] transform transition-all duration-300 scale-100 opacity-100">
+<!-- Header -->
+<header class="flex items-center justify-between px-lg py-md border-b border-outline-variant/50 sticky top-0 bg-surface-container-lowest/95 backdrop-blur-sm rounded-t-xl z-10">
+<h2 class="font-headline-sm text-headline-sm text-on-surface" id="modal-title">Add New Book</h2>
+<button aria-label="Close modal" class="text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high rounded-full p-sm transition-colors duration-200" type="button">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">close</span>
+</button>
+</header>
+<!-- Form Body -->
+<div class="flex-1 overflow-y-auto p-lg md:p-xl space-y-xl">
+<!-- Section 1: Book Details -->
+<section>
+<h3 class="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider mb-md border-b border-outline-variant/30 pb-xs">Book Details</h3>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-md md:gap-lg">
+<div class="col-span-1 md:col-span-2">
+<label class="label-base" for="book-title">Title <span class="text-error">*</span></label>
+<input class="input-base" id="book-title" placeholder="Enter full book title" type="text"/>
+</div>
+<div>
+<label class="label-base" for="book-author">Author <span class="text-error">*</span></label>
+<input class="input-base" id="book-author" placeholder="Primary author" type="text"/>
+</div>
+<div>
+<label class="label-base" for="book-isbn">ISBN-13</label>
+<div class="relative">
+<input class="input-base pr-[44px]" id="book-isbn" placeholder="e.g., 978-0-123456-47-2" type="text"/>
+<button class="absolute inset-y-0 right-0 flex items-center px-sm text-on-surface-variant hover:text-primary transition-colors bg-transparent border-none cursor-pointer" title="Scan or Search ISBN" type="button">
+<span class="material-symbols-outlined">document_scanner</span>
+</button>
+</div>
+</div>
+<div>
+<label class="label-base" for="book-year">Publication Year</label>
+<input class="input-base" id="book-year" max="2100" min="1000" placeholder="YYYY" type="number"/>
+</div>
+</div>
+</section>
+<!-- Section 2: Classification -->
+<section>
+<h3 class="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider mb-md border-b border-outline-variant/30 pb-xs">Classification</h3>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-md md:gap-lg">
+<div>
+<label class="label-base" for="book-genre">Genre</label>
+<select class="input-base appearance-none cursor-pointer bg-no-repeat" id="book-genre" style="background-image: url('data:image/svg+xml;utf8,&lt;svg xmlns=\'http://www.w3.org/2000/svg\' width=\'24\' height=\'24\' viewBox=\'0 0 24 24\' fill=\'none\' stroke=\'%236c7a71\' stroke-width=\'2\' stroke-linecap=\'round\' stroke-linejoin=\'round\'&gt;&lt;polyline points=\'6 9 12 15 18 9\'&gt;&lt;/polyline&gt;&lt;/svg&gt;'); background-position: right 0.75rem center; background-size: 1.2em;">
+<option disabled="" selected="" value="">Select a genre</option>
+<option value="fiction">Fiction</option>
+<option value="non-fiction">Non-fiction</option>
+<option value="sci-fi">Sci-Fi &amp; Fantasy</option>
+<option value="history">History</option>
+<option value="biography">Biography</option>
+<option value="reference">Reference</option>
+</select>
+</div>
+<div>
+<label class="label-base" for="book-language">Language</label>
+<select class="input-base appearance-none cursor-pointer bg-no-repeat" id="book-language" style="background-image: url('data:image/svg+xml;utf8,&lt;svg xmlns=\'http://www.w3.org/2000/svg\' width=\'24\' height=\'24\' viewBox=\'0 0 24 24\' fill=\'none\' stroke=\'%236c7a71\' stroke-width=\'2\' stroke-linecap=\'round\' stroke-linejoin=\'round\'&gt;&lt;polyline points=\'6 9 12 15 18 9\'&gt;&lt;/polyline&gt;&lt;/svg&gt;'); background-position: right 0.75rem center; background-size: 1.2em;">
+<option selected="" value="en">English</option>
+<option value="es">Spanish</option>
+<option value="fr">French</option>
+<option value="de">German</option>
+<option value="ja">Japanese</option>
+</select>
+</div>
+</div>
+</section>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-xl">
+<!-- Left Column: Inventory & Status -->
+<div class="space-y-xl">
+<!-- Section 3: Inventory -->
+<section>
+<h3 class="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider mb-md border-b border-outline-variant/30 pb-xs">Inventory Details</h3>
+<div class="grid grid-cols-2 gap-md">
+<div>
+<label class="label-base" for="book-copies">Copies</label>
+<input class="input-base" id="book-copies" min="1" type="number" value="1"/>
+</div>
+<div>
+<label class="label-base" for="book-location">Location / Shelf</label>
+<input class="input-base" id="book-location" placeholder="e.g., A4-Top" type="text"/>
+</div>
+</div>
+</section>
+<!-- Section 4: Status -->
+<section>
+<h3 class="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider mb-md border-b border-outline-variant/30 pb-xs">Status</h3>
+<div class="flex gap-md">
+<label class="relative flex-1 cursor-pointer">
+<input checked="" class="peer sr-only" name="book-status" type="radio" value="available"/>
+<div class="w-full text-center px-md py-sm rounded-lg border border-outline-variant text-on-surface-variant font-label-md text-label-md transition-all duration-200 peer-checked:bg-primary-container/20 peer-checked:text-primary peer-checked:border-primary peer-hover:bg-surface-container-high">
+                                        Available
+                                    </div>
+</label>
+<label class="relative flex-1 cursor-pointer">
+<input class="peer sr-only" name="book-status" type="radio" value="processing"/>
+<div class="w-full text-center px-md py-sm rounded-lg border border-outline-variant text-on-surface-variant font-label-md text-label-md transition-all duration-200 peer-checked:bg-surface-container-high peer-checked:text-on-surface peer-checked:border-on-surface-variant peer-hover:bg-surface-container-high">
+                                        In Processing
+                                    </div>
+</label>
+</div>
+</section>
+</div>
+<!-- Right Column: Cover Image Upload -->
+<section>
+<h3 class="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider mb-md border-b border-outline-variant/30 pb-xs">Cover Image</h3>
+<div class="h-[220px] relative rounded-xl border-2 border-dashed border-outline-variant bg-surface-container-lowest hover:bg-surface-container-low transition-colors duration-200 flex flex-col items-center justify-center cursor-pointer group">
+<input accept="image/*" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer" id="book-cover" type="file"/>
+<div class="flex flex-col items-center text-center p-md pointer-events-none">
+<div class="w-16 h-16 rounded-full bg-surface-container-high flex items-center justify-center mb-sm group-hover:scale-110 transition-transform duration-200">
+<span class="material-symbols-outlined text-[32px] text-primary" style="font-variation-settings: 'FILL' 0;">cloud_upload</span>
+</div>
+<p class="font-label-md text-label-md text-primary mb-xs">Click to upload or drag and drop</p>
+<p class="font-body-sm text-body-sm text-on-surface-variant">SVG, PNG, JPG or GIF (max. 800x400px)</p>
+</div>
+</div>
+</section>
+</div>
+</div>
+<!-- Footer -->
+<footer class="px-lg py-md border-t border-outline-variant/50 bg-surface-bright rounded-b-xl flex justify-end gap-md sticky bottom-0 z-10">
+<button class="px-lg py-[10px] rounded-lg font-label-md text-label-md border border-outline text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors duration-200" type="button">
+                    Cancel
+                </button>
+<button class="px-lg py-[10px] rounded-lg font-label-md text-label-md bg-primary text-on-primary hover:bg-surface-tint shadow-sm hover:shadow-md transition-all duration-200 flex items-center gap-sm" type="submit">
+<span class="material-symbols-outlined text-[18px]" style="font-variation-settings: 'FILL' 0;">add_circle</span>
+                    Add to Collection
+                </button>
+</footer>
+</div>
+</div>
+</body></html>

@@ -1,0 +1,345 @@
+# Software Requirements Specification (SRS)
+
+## Project: Book Management System
+
+---
+
+# 1. Introduction
+
+## 1.1 Purpose
+
+This document defines the software requirements for the Book Management System. The application is designed to allow users to manage a collection of books through functionalities such as viewing, adding, updating, deleting, searching, and filtering books. The system will provide a responsive and user-friendly interface backed by a RESTful mock API.
+
+## 1.2 Scope
+
+The Book Management System is a single-page web application built using React.js for the frontend and a mock REST API for backend data handling. The system supports CRUD (Create, Read, Update, Delete) operations for books, real-time search and filtering, proper error handling, and responsive deployment-ready architecture.
+
+---
+
+# 2. System Architecture & Technology Stack
+
+## Frontend
+
+* React.js (Functional Components & Hooks)
+* HTML5
+* CSS3 / Tailwind CSS (or another preferred styling framework)
+
+## Backend / API
+
+* JSON Server
+* MockAPI
+* Supabase (optional)
+* Node.js + Express mock backend (optional)
+
+## Deployment Platforms
+
+### Frontend Hosting
+
+* Netlify
+* Vercel
+
+### Backend Hosting
+
+* Render
+* Railway
+* MockAPI
+
+---
+
+# 3. Functional Requirements
+
+## 3.1 Frontend Requirements
+
+The frontend application must follow a modular and reusable component-based architecture.
+
+---
+
+## 3.1.1 Book Showcase & List View
+
+### FR-1.1: Fetch and Display Books
+
+The system shall retrieve and display all books from the API when the application loads.
+
+### FR-1.2: Book Information Display
+
+Each book entry shall display the following details:
+
+* Title
+* Author
+* Genre
+* Publication Year
+
+### FR-1.3: Loading State
+
+The system shall display a loading spinner or skeleton screen while waiting for API responses.
+
+---
+
+## 3.1.2 Book Management (CRUD Operations)
+
+### FR-2.1: Create Book
+
+The system shall provide a form for adding new books with the following input fields:
+
+* Title
+* Author
+* Genre
+* Publication Year
+
+Validation rules:
+
+* All required fields must be completed before submission.
+* Empty submissions shall be prevented.
+
+### FR-2.2: Read Books
+
+The UI shall dynamically refresh and reflect the latest data after successful fetch, creation, update, or deletion operations.
+
+### FR-2.3: Update Book
+
+The system shall allow users to:
+
+1. Click an **Edit** button for a selected book.
+2. View a pre-filled form containing the existing book details.
+3. Save updated information to the API.
+
+### FR-2.4: Delete Book
+
+The system shall provide a **Delete** button for each book. Upon confirmation:
+
+* An API DELETE request shall be sent.
+* The book shall be removed from the UI instantly after success.
+
+---
+
+## 3.1.3 Search & Filtering
+
+### FR-3.1: Search Functionality
+
+The system shall include a search bar that filters books in real time based on:
+
+* Title
+* Author
+
+### FR-3.2: Genre Filtering
+
+The system shall provide:
+
+* A dropdown menu, or
+* Filter buttons
+
+to allow filtering books by genre.
+
+---
+
+## 3.1.4 Error & State Handling
+
+### FR-4.1: Error Handling
+
+The system shall gracefully handle API failures and display meaningful error messages such as:
+
+> “Failed to fetch books. Please try again later.”
+
+The application shall also handle:
+
+* Network failures
+* Invalid API responses
+* Empty state handling
+
+---
+
+# 3.2 Backend Requirements (Mock API)
+
+The backend API must support persistent mock data and RESTful endpoints.
+
+---
+
+## 3.2.1 Data Model (JSON Schema)
+
+The `books` collection shall follow the structure below:
+
+```json
+{
+  "books": [
+    {
+      "id": "string-or-number",
+      "title": "string",
+      "author": "string",
+      "genre": "string",
+      "publicationYear": "number-or-string"
+    }
+  ]
+}
+```
+
+---
+
+## 3.2.2 Required API Endpoints
+
+| Method    | Endpoint     | Description         | Success Status          |
+| --------- | ------------ | ------------------- | ----------------------- |
+| GET       | `/books`     | Fetch all books     | 200 OK                  |
+| POST      | `/books`     | Add a new book      | 201 Created             |
+| PUT/PATCH | `/books/:id` | Update a book by ID | 200 OK                  |
+| DELETE    | `/books/:id` | Delete a book by ID | 200 OK / 204 No Content |
+
+---
+
+# 4. Non-Functional Requirements
+
+## 4.1 Performance & User Experience
+
+### Loading Indicators
+
+All asynchronous operations such as data fetching, submission, updating, and deletion shall display appropriate loading indicators.
+
+### Responsiveness
+
+The application shall be fully responsive and optimized for:
+
+* Mobile devices
+* Tablets
+* Desktop screens
+
+---
+
+## 4.2 Maintainability
+
+### Component Separation
+
+The frontend shall maintain separation of concerns using reusable components such as:
+
+* `BookForm`
+* `BookList`
+* `BookCard`
+* `SearchBar`
+* `GenreFilter`
+
+### Clean Code Standards
+
+The project shall follow:
+
+* Semantic HTML practices
+* Clear variable naming conventions
+* Organized folder structure
+* Proper separation of business logic and UI rendering
+
+---
+
+## 4.3 Deployment & Deliverables
+
+### CI/CD Deployment
+
+The frontend application shall be deployed to a public hosting platform and accessible through a live URL.
+
+### Persistent Backend Hosting
+
+The mock API backend shall also be hosted online to ensure full functionality of the deployed frontend application.
+
+---
+
+# 5. Recommended Folder Structure
+
+```bash
+src/
+│
+├── components/
+│   ├── BookCard.jsx
+│   ├── BookForm.jsx
+│   ├── BookList.jsx
+│   ├── SearchBar.jsx
+│   └── GenreFilter.jsx
+│
+├── services/
+│   └── api.js
+│
+├── pages/
+│   └── Home.jsx
+│
+├── hooks/
+│   └── useBooks.js
+│
+├── styles/
+│   └── global.css
+│
+├── App.jsx
+└── main.jsx
+```
+
+---
+
+# 6. Deployment Strategy
+
+## Frontend Deployment
+
+Recommended platforms:
+
+* Vercel
+* Netlify
+
+## Backend Deployment
+
+Recommended platforms:
+
+* Render
+* Railway
+* MockAPI
+
+---
+
+# 7. Project Submission Checklist
+
+The final submission must include:
+
+## GitHub Repository
+
+A public GitHub repository containing:
+
+* Complete source code
+* Proper commit history
+* Organized project structure
+
+## Live Deployment URL
+
+A fully functional deployed application connected to the hosted API.
+
+## README.md Documentation
+
+The repository must contain a comprehensive `README.md` with:
+
+* Project overview
+* Features
+* Tech stack
+* Installation steps
+* Environment setup
+* API setup instructions
+* Deployment guide
+
+Example setup commands:
+
+```bash
+npm install
+npm run dev
+```
+
+or
+
+```bash
+npm install
+npm start
+```
+
+---
+
+# 8. Future Enhancements (Optional)
+
+Possible future improvements include:
+
+* User authentication & authorization
+* Book cover image uploads
+* Pagination & infinite scrolling
+* Dark mode support
+* Sorting by year/title
+* Favorites & bookmarking
+* Advanced search filters
+* Cloud database integration

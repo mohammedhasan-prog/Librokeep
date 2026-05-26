@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>LibroKeep - Dashboard</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "on-error": "#ffffff",
+                        "on-secondary": "#ffffff",
+                        "on-surface-variant": "#3c4a42",
+                        "on-secondary-container": "#fffbff",
+                        "tertiary-fixed-dim": "#ffb3ad",
+                        "on-primary-container": "#00422b",
+                        "on-secondary-fixed-variant": "#2f2ebe",
+                        "primary-fixed-dim": "#4edea3",
+                        "background": "#f8f9ff",
+                        "surface": "#f8f9ff",
+                        "secondary-fixed-dim": "#c0c1ff",
+                        "tertiary-fixed": "#ffdad7",
+                        "surface-dim": "#cbdbf5",
+                        "on-tertiary-fixed": "#410004",
+                        "surface-container": "#e5eeff",
+                        "on-surface": "#0b1c30",
+                        "secondary-container": "#6063ee",
+                        "inverse-surface": "#213145",
+                        "on-tertiary-container": "#79000e",
+                        "error": "#ba1a1a",
+                        "on-primary-fixed": "#002113",
+                        "tertiary-container": "#ff7a73",
+                        "surface-container-high": "#dce9ff",
+                        "surface-container-highest": "#d3e4fe",
+                        "primary-fixed": "#6ffbbe",
+                        "outline": "#6c7a71",
+                        "on-secondary-fixed": "#07006c",
+                        "secondary": "#4648d4",
+                        "on-tertiary": "#ffffff",
+                        "surface-tint": "#006c49",
+                        "secondary-fixed": "#e1e0ff",
+                        "tertiary": "#b91a24",
+                        "error-container": "#ffdad6",
+                        "surface-variant": "#d3e4fe",
+                        "primary": "#006c49",
+                        "inverse-on-surface": "#eaf1ff",
+                        "surface-container-lowest": "#ffffff",
+                        "on-error-container": "#93000a",
+                        "on-primary": "#ffffff",
+                        "on-primary-fixed-variant": "#005236",
+                        "on-background": "#0b1c30",
+                        "inverse-primary": "#4edea3",
+                        "primary-container": "#10b981",
+                        "outline-variant": "#bbcabf",
+                        "surface-bright": "#f8f9ff",
+                        "surface-container-low": "#eff4ff",
+                        "on-tertiary-fixed-variant": "#930013"
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    spacing: {
+                        "xs": "0.25rem",
+                        "margin-mobile": "1rem",
+                        "gutter": "1.5rem",
+                        "sm": "0.5rem",
+                        "base": "4px",
+                        "lg": "1.5rem",
+                        "margin-desktop": "2.5rem",
+                        "xl": "2rem",
+                        "md": "1rem"
+                    },
+                    fontFamily: {
+                        "label-md": ["Inter"],
+                        "headline-lg-mobile": ["Inter"],
+                        "headline-lg": ["Inter"],
+                        "label-sm": ["Inter"],
+                        "body-md": ["Inter"],
+                        "headline-sm": ["Inter"],
+                        "display-lg": ["Inter"],
+                        "body-sm": ["Inter"],
+                        "body-lg": ["Inter"],
+                        "headline-md": ["Inter"]
+                    },
+                    fontSize: {
+                        "label-md": ["14px", { lineHeight: "20px", letterSpacing: "0.05em", fontWeight: "600" }],
+                        "headline-lg-mobile": ["24px", { lineHeight: "32px", fontWeight: "600" }],
+                        "headline-lg": ["32px", { lineHeight: "40px", letterSpacing: "-0.01em", fontWeight: "600" }],
+                        "label-sm": ["12px", { lineHeight: "16px", fontWeight: "500" }],
+                        "body-md": ["16px", { lineHeight: "24px", fontWeight: "400" }],
+                        "headline-sm": ["20px", { lineHeight: "28px", fontWeight: "600" }],
+                        "display-lg": ["48px", { lineHeight: "56px", letterSpacing: "-0.02em", fontWeight: "700" }],
+                        "body-sm": ["14px", { lineHeight: "20px", fontWeight: "400" }],
+                        "body-lg": ["18px", { lineHeight: "28px", fontWeight: "400" }],
+                        "headline-md": ["24px", { lineHeight: "32px", fontWeight: "600" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .icon-fill {
+            font-variation-settings: 'FILL' 1;
+        }
+        
+        /* Custom Shadows for Level 1 and 2 */
+        .shadow-level-1 {
+            box-shadow: 0px 4px 20px rgba(100, 116, 139, 0.08);
+        }
+        .shadow-level-2 {
+            box-shadow: 0px 10px 30px rgba(100, 116, 139, 0.12);
+        }
+        
+        /* Hide scrollbar for clean look */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 3px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+    </style>
+</head>
+<body class="bg-surface text-on-surface font-body-md h-screen flex overflow-hidden selection:bg-primary-container selection:text-on-primary-container">
+<!-- Mobile Top Header (Visible only on small screens) -->
+<header class="md:hidden flex justify-between items-center w-full px-margin-mobile py-sm sticky top-0 z-40 bg-surface/80 backdrop-blur-md border-b border-outline-variant">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-2xl">auto_stories</span>
+<h1 class="font-headline-md text-headline-md font-bold text-on-surface">LibroKeep</h1>
+</div>
+<div class="flex items-center gap-4">
+<button class="text-on-surface-variant hover:text-primary transition-colors">
+<span class="material-symbols-outlined">search</span>
+</button>
+<button class="text-on-surface-variant hover:text-primary transition-colors relative">
+<span class="material-symbols-outlined">notifications</span>
+<span class="absolute top-0 right-0 w-2 h-2 bg-error rounded-full"></span>
+</button>
+<button class="text-on-surface-variant hover:text-primary transition-colors">
+<span class="material-symbols-outlined">account_circle</span>
+</button>
+</div>
+</header>
+<!-- SideNavBar (Hidden on mobile, flex on desktop) -->
+<aside class="hidden md:flex flex-col h-screen w-64 fixed left-0 top-0 bg-inverse-surface shadow-lg z-50">
+<!-- Brand Header -->
+<div class="p-lg flex items-center gap-3">
+<div class="w-10 h-10 rounded-lg bg-primary-fixed flex items-center justify-center text-on-primary-fixed shadow-sm">
+<span class="material-symbols-outlined icon-fill">auto_stories</span>
+</div>
+<div>
+<h1 class="font-headline-sm text-headline-sm font-black text-primary-fixed tracking-tight">LibroKeep</h1>
+<p class="font-label-sm text-label-sm text-primary-fixed-dim opacity-80">Management System</p>
+</div>
+</div>
+<!-- Navigation Links -->
+<nav class="flex-1 overflow-y-auto mt-4 py-2 space-y-1">
+<!-- Active Tab -->
+<a class="flex items-center text-primary-fixed bg-surface-variant/10 border-l-4 border-primary-fixed py-md px-lg gap-3 translate-x-1 transition-transform" href="#">
+<span class="material-symbols-outlined icon-fill">dashboard</span>
+<span class="font-label-md text-label-md">Dashboard</span>
+</a>
+<!-- Inactive Tabs -->
+<a class="flex items-center text-on-secondary-fixed-variant py-md px-lg opacity-70 gap-3 hover:bg-surface-variant/20 hover:opacity-100 transition-all duration-200" href="#">
+<span class="material-symbols-outlined">menu_book</span>
+<span class="font-label-md text-label-md">My Books</span>
+</a>
+<a class="flex items-center text-on-secondary-fixed-variant py-md px-lg opacity-70 gap-3 hover:bg-surface-variant/20 hover:opacity-100 transition-all duration-200" href="#">
+<span class="material-symbols-outlined">swap_horiz</span>
+<span class="font-label-md text-label-md">Borrowed/Lending</span>
+</a>
+<a class="flex items-center text-on-secondary-fixed-variant py-md px-lg opacity-70 gap-3 hover:bg-surface-variant/20 hover:opacity-100 transition-all duration-200" href="#">
+<span class="material-symbols-outlined">group</span>
+<span class="font-label-md text-label-md">Members</span>
+</a>
+<a class="flex items-center text-on-secondary-fixed-variant py-md px-lg opacity-70 gap-3 hover:bg-surface-variant/20 hover:opacity-100 transition-all duration-200" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="font-label-md text-label-md">Settings</span>
+</a>
+</nav>
+<!-- User Profile Snippet -->
+<div class="mt-auto border-t border-surface-variant/10 p-lg flex items-center justify-between">
+<div class="flex items-center gap-3">
+<img alt="Profile" class="w-10 h-10 rounded-full border-2 border-primary-fixed/30 object-cover" data-alt="A close-up portrait of a professional librarian, Alex Rivera, smiling softly. He is a young hispanic male with short dark hair, wearing a clean, modern slate-grey shirt. The lighting is bright and soft, creating a calm, approachable mood that fits a modern minimalist book management interface. The background is a blurred, pristine white wall." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDFpMGOYk8cJs7dhW7oh6in2uFHbHIDeSTac_RJlZ3TfdkEDczcmzL6D6nvCY1qwXxXRs8mSoY87DMVv47OKh-vjA1E-UdfeOR32ZBP7l28awfs8NmX-Of74x-uyiSh3mw2cIbYCNwkgJJ-f0klJqf_3EIChMIAwqAK5GiT9cXeOzHzhM8k_uPxDxnSCKllEQQ2m2sf8aoigZmY55pLHkqPdNm9wyfu5-OHW0Vfmfa-1n_zDTDXPDUUKByDTNer_F4xmKdLl8R6JcdA"/>
+<div>
+<p class="font-label-md text-label-md text-primary-fixed leading-tight">Alex Rivera</p>
+<p class="font-body-sm text-body-sm text-primary-fixed-dim opacity-70">Librarian</p>
+</div>
+</div>
+<button class="text-on-secondary-fixed-variant opacity-70 hover:opacity-100 hover:text-error transition-colors" title="Logout">
+<span class="material-symbols-outlined">logout</span>
+</button>
+</div>
+</aside>
+<!-- Main Content Canvas -->
+<main class="flex-1 md:ml-64 h-full overflow-y-auto bg-[#F8FAFC]">
+<!-- Top Search & Actions Bar (Desktop) -->
+<header class="hidden md:flex justify-between items-center w-full px-margin-desktop py-lg sticky top-0 z-40 bg-[#F8FAFC]/90 backdrop-blur-md">
+<!-- Global Search -->
+<div class="relative w-full max-w-xl group">
+<div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+<span class="material-symbols-outlined text-outline">search</span>
+</div>
+<input class="w-full pl-10 pr-16 py-2.5 bg-white border border-slate-200 rounded-lg font-body-md text-on-surface focus:outline-none focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all duration-200 shadow-sm placeholder:text-outline-variant" placeholder="Search by title, author, or ISBN..." type="text"/>
+<div class="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
+<span class="font-label-sm text-label-sm text-outline border border-slate-200 rounded px-1.5 py-0.5 bg-slate-50">⌘K</span>
+</div>
+</div>
+<!-- Header Actions -->
+<div class="flex items-center gap-6 ml-6">
+<!-- Notifications -->
+<button class="relative text-on-surface-variant hover:text-primary transition-colors w-10 h-10 flex items-center justify-center rounded-full hover:bg-surface-container-high">
+<span class="material-symbols-outlined">notifications</span>
+<span class="absolute top-2 right-2 w-2 h-2 bg-error rounded-full border-2 border-[#F8FAFC]"></span>
+</button>
+<!-- Primary Action -->
+<button class="flex items-center gap-2 bg-primary text-white px-5 py-2.5 rounded-lg font-label-md text-label-md hover:bg-[#005a3c] transition-colors shadow-md hover:shadow-lg hover:-translate-y-0.5 active:translate-y-0">
+<span class="material-symbols-outlined text-sm">add</span>
+                    Add New Book
+                </button>
+</div>
+</header>
+<!-- Page Content -->
+<div class="px-margin-mobile md:px-margin-desktop pb-xl pt-6 md:pt-2 max-w-[1440px] mx-auto">
+<!-- Welcome Header -->
+<div class="mb-8">
+<h2 class="font-headline-lg text-headline-lg-mobile md:text-headline-lg text-on-surface mb-1">Good morning, Alex</h2>
+<p class="font-body-md text-body-md text-on-surface-variant">Here's what's happening in your library today.</p>
+</div>
+<!-- Analytics Row -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-gutter mb-10">
+<!-- Card 1 -->
+<div class="bg-white p-lg rounded-xl shadow-level-1 border border-slate-200 hover:-translate-y-1 hover:shadow-level-2 transition-all duration-300 relative overflow-hidden group">
+<div class="absolute top-0 right-0 p-4 opacity-5 group-hover:opacity-10 transition-opacity">
+<span class="material-symbols-outlined text-6xl text-primary">library_books</span>
+</div>
+<div class="flex items-center justify-between mb-4 relative z-10">
+<h3 class="font-label-md text-label-md text-on-surface-variant">Total Books</h3>
+<div class="w-8 h-8 rounded bg-surface-container flex items-center justify-center text-primary">
+<span class="material-symbols-outlined text-sm icon-fill">auto_stories</span>
+</div>
+</div>
+<div class="flex items-end gap-3 relative z-10">
+<span class="font-display-lg text-display-lg text-on-surface tracking-tight">1,248</span>
+<span class="font-label-sm text-label-sm text-primary bg-primary/10 px-2 py-1 rounded-md mb-2 flex items-center gap-1">
+<span class="material-symbols-outlined text-[12px]">trending_up</span> +12%
+                        </span>
+</div>
+</div>
+<!-- Card 2 -->
+<div class="bg-white p-lg rounded-xl shadow-level-1 border border-slate-200 hover:-translate-y-1 hover:shadow-level-2 transition-all duration-300 relative overflow-hidden group">
+<div class="absolute top-0 right-0 p-4 opacity-5 group-hover:opacity-10 transition-opacity">
+<span class="material-symbols-outlined text-6xl text-secondary">bookmark_added</span>
+</div>
+<div class="flex items-center justify-between mb-4 relative z-10">
+<h3 class="font-label-md text-label-md text-on-surface-variant">Currently Borrowed</h3>
+<div class="w-8 h-8 rounded bg-secondary-container/20 flex items-center justify-center text-secondary">
+<span class="material-symbols-outlined text-sm icon-fill">swap_horiz</span>
+</div>
+</div>
+<div class="flex items-end gap-3 relative z-10">
+<span class="font-display-lg text-display-lg text-on-surface tracking-tight">84</span>
+</div>
+</div>
+<!-- Card 3 -->
+<div class="bg-white p-lg rounded-xl shadow-level-1 border border-slate-200 hover:-translate-y-1 hover:shadow-level-2 transition-all duration-300 relative overflow-hidden group">
+<div class="absolute top-0 right-0 p-4 opacity-5 group-hover:opacity-10 transition-opacity">
+<span class="material-symbols-outlined text-6xl text-error">warning</span>
+</div>
+<div class="flex items-center justify-between mb-4 relative z-10">
+<h3 class="font-label-md text-label-md text-error">Overdue Returns</h3>
+<div class="w-8 h-8 rounded bg-error-container/50 flex items-center justify-center text-error">
+<span class="material-symbols-outlined text-sm icon-fill">event_busy</span>
+</div>
+</div>
+<div class="flex items-end gap-3 relative z-10">
+<span class="font-display-lg text-display-lg text-error tracking-tight">12</span>
+</div>
+</div>
+<!-- Card 4 -->
+<div class="bg-white p-lg rounded-xl shadow-level-1 border border-slate-200 hover:-translate-y-1 hover:shadow-level-2 transition-all duration-300 relative overflow-hidden group">
+<div class="absolute top-0 right-0 p-4 opacity-5 group-hover:opacity-10 transition-opacity">
+<span class="material-symbols-outlined text-6xl text-[#0ea5e9]">group</span>
+</div>
+<div class="flex items-center justify-between mb-4 relative z-10">
+<h3 class="font-label-md text-label-md text-on-surface-variant">Active Members</h3>
+<div class="w-8 h-8 rounded bg-[#e0f2fe] flex items-center justify-center text-[#0ea5e9]">
+<span class="material-symbols-outlined text-sm icon-fill">person</span>
+</div>
+</div>
+<div class="flex items-end gap-3 relative z-10">
+<span class="font-display-lg text-display-lg text-on-surface tracking-tight">156</span>
+</div>
+</div>
+</div>
+<!-- Two Column Layout: Recent Acquisitions & Active Loans -->
+<div class="grid grid-cols-1 xl:grid-cols-3 gap-8">
+<!-- Recent Acquisitions (Takes 1 column on XL, full on smaller) -->
+<div class="xl:col-span-1 flex flex-col gap-4">
+<div class="flex justify-between items-end mb-2">
+<h3 class="font-headline-sm text-headline-sm text-on-surface">Recent Acquisitions</h3>
+<a class="font-label-sm text-label-sm text-primary hover:underline flex items-center" href="#">View all <span class="material-symbols-outlined text-[16px] ml-1">chevron_right</span></a>
+</div>
+<div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-1 gap-4">
+<!-- Book Card 1 -->
+<div class="bg-white rounded-xl shadow-level-1 border border-slate-200 p-md flex gap-4 hover:-translate-y-1 hover:shadow-level-2 transition-all duration-300 cursor-pointer">
+<div class="w-16 h-24 rounded shadow-[inset_0_2px_4px_rgba(0,0,0,0.1)] overflow-hidden shrink-0 bg-slate-100">
+<img alt="The Midnight Library Cover" class="w-full h-full object-cover" data-alt="A modern minimalist book cover design for 'The Midnight Library'. The cover features an abstract deep blue night sky with a single glowing star. The title is written in an elegant, clean sans-serif white font. The aesthetic matches a clean, modern digital library interface with crisp edges." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAdGbHFeUpF3AdLZFGcWZU3-H6mpvmlq5L5r2dbnOXQi3iEovvKKtqr5VPfQ2KALLbFc9Wpdt6ATZLbyBEe_YGTMlnrIzQb-f12Y57wBKAg-SpBou6K8DrsgeIkm3e2YyCcPFza1wvTBQ04yxgaopmlN8Kt9YG-ww7pQ52x6YkE6Zn1NgFGEV3hh-CMiMQ9FWTNelGaPMPTjjcFD7d2a6AR2I_cABJUw3uewesCra_Bql5Fd_E7iZ6EC4bK2ji9Te3Q1icAqGbeTMYT"/>
+</div>
+<div class="flex flex-col justify-between py-1">
+<div>
+<h4 class="font-label-md text-label-md text-on-surface line-clamp-1">The Midnight Library</h4>
+<p class="font-body-sm text-body-sm text-on-surface-variant line-clamp-1">Matt Haig</p>
+</div>
+<div class="flex items-center gap-2 mt-2">
+<span class="px-2 py-0.5 rounded text-[10px] font-semibold bg-slate-100 text-slate-600 uppercase tracking-wider">Fiction</span>
+<span class="px-2 py-0.5 rounded text-[10px] font-semibold bg-emerald-50 text-primary uppercase tracking-wider border border-emerald-100">Available</span>
+</div>
+</div>
+</div>
+<!-- Book Card 2 -->
+<div class="bg-white rounded-xl shadow-level-1 border border-slate-200 p-md flex gap-4 hover:-translate-y-1 hover:shadow-level-2 transition-all duration-300 cursor-pointer">
+<div class="w-16 h-24 rounded shadow-[inset_0_2px_4px_rgba(0,0,0,0.1)] overflow-hidden shrink-0 bg-slate-100">
+<img alt="Atomic Habits Cover" class="w-full h-full object-cover" data-alt="A sleek book cover for 'Atomic Habits'. The cover is bright yellow with bold, minimalist black typography. It rests in a clean, well-lit digital environment, perfectly aligned with a modern library management system's visual style. The lighting highlights the texture of the paper." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDn1OHOAQreBYIFk2ePoFnYQKHnPyA1tz91ao7dPhJiqtV6fZgtiRXHud5eCuNwN2WpgSEtchIGfv7zBrz1LhyXEAELkKQ0G_eTHeLLhDZP5dw7se2Jq-WZ4AZRazbU1t6hfelCl-R1WdAsuazqEH9z662mWNn6TtlQB_e-zRDE6syNhbQBURbsaA1wMzV2wO_ct5TBJgA8F2uvOKi9f0PpTxM08R2qH-uzAjmvSt19LWUrtpCVsTfiScZPrtHRfUyVSmDBvyk2uaKP"/>
+</div>
+<div class="flex flex-col justify-between py-1">
+<div>
+<h4 class="font-label-md text-label-md text-on-surface line-clamp-1">Atomic Habits</h4>
+<p class="font-body-sm text-body-sm text-on-surface-variant line-clamp-1">James Clear</p>
+</div>
+<div class="flex items-center gap-2 mt-2">
+<span class="px-2 py-0.5 rounded text-[10px] font-semibold bg-slate-100 text-slate-600 uppercase tracking-wider">Self-Help</span>
+<span class="px-2 py-0.5 rounded text-[10px] font-semibold bg-emerald-50 text-primary uppercase tracking-wider border border-emerald-100">Available</span>
+</div>
+</div>
+</div>
+<!-- Book Card 3 -->
+<div class="bg-white rounded-xl shadow-level-1 border border-slate-200 p-md flex gap-4 hover:-translate-y-1 hover:shadow-level-2 transition-all duration-300 cursor-pointer">
+<div class="w-16 h-24 rounded shadow-[inset_0_2px_4px_rgba(0,0,0,0.1)] overflow-hidden shrink-0 bg-slate-100">
+<img alt="Dune Cover" class="w-full h-full object-cover" data-alt="A minimalist vintage book cover for 'Dune'. The cover depicts a stylized, abstract sandy dune in warm orange and tan hues against a dark background. The design is clean and elegant, suited for a high-end digital catalog. The image is crisp and professional." src="https://lh3.googleusercontent.com/aida-public/AB6AXuB_vRRvxpwmASydU-pYDIZWO7nElTzRBHqN70g6uMgkGXp_eQMNP_GLqXweMPiIvxt5zLHto75YmHUii11TBg7CpOC2fipOfMOJr_NKHgLPothr0oZ8bXD_SI_aXGAKRPz967LZNBN6-_EvGneFO8ArmZK_fcWj-fvYW8zrLA-i8s8sXhj_8tLbBHbSUYi18G8eeg_lGvDHn8PWTavGyKmBCCtQr8k5Ln2hq8kipog3sO3cugocsDLEas4WtE5OaJ79La1igk2-VM5R"/>
+</div>
+<div class="flex flex-col justify-between py-1">
+<div>
+<h4 class="font-label-md text-label-md text-on-surface line-clamp-1">Dune</h4>
+<p class="font-body-sm text-body-sm text-on-surface-variant line-clamp-1">Frank Herbert</p>
+</div>
+<div class="flex items-center gap-2 mt-2">
+<span class="px-2 py-0.5 rounded text-[10px] font-semibold bg-slate-100 text-slate-600 uppercase tracking-wider">Sci-Fi</span>
+<span class="px-2 py-0.5 rounded text-[10px] font-semibold bg-indigo-50 text-secondary uppercase tracking-wider border border-indigo-100">Borrowed</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Active Loans Table (Takes 2 columns on XL, full on smaller) -->
+<div class="xl:col-span-2 flex flex-col gap-4">
+<div class="flex justify-between items-end mb-2">
+<h3 class="font-headline-sm text-headline-sm text-on-surface">Active Loans</h3>
+<div class="flex gap-2">
+<button class="w-8 h-8 rounded border border-slate-200 flex items-center justify-center text-outline-variant hover:text-primary hover:border-primary transition-colors bg-white">
+<span class="material-symbols-outlined text-sm">filter_list</span>
+</button>
+<button class="w-8 h-8 rounded border border-slate-200 flex items-center justify-center text-outline-variant hover:text-primary hover:border-primary transition-colors bg-white">
+<span class="material-symbols-outlined text-sm">more_vert</span>
+</button>
+</div>
+</div>
+<div class="bg-white rounded-xl shadow-level-1 border border-slate-200 overflow-hidden">
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead class="bg-slate-50/80 backdrop-blur-sm sticky top-0 z-10 border-b border-slate-200">
+<tr>
+<th class="py-3 px-4 font-label-sm text-label-sm text-outline uppercase tracking-wider whitespace-nowrap">Title</th>
+<th class="py-3 px-4 font-label-sm text-label-sm text-outline uppercase tracking-wider whitespace-nowrap">Borrower</th>
+<th class="py-3 px-4 font-label-sm text-label-sm text-outline uppercase tracking-wider whitespace-nowrap">Due Date</th>
+<th class="py-3 px-4 font-label-sm text-label-sm text-outline uppercase tracking-wider whitespace-nowrap">Status</th>
+<th class="py-3 px-4 font-label-sm text-label-sm text-outline uppercase tracking-wider text-right whitespace-nowrap">Action</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-slate-100 font-body-sm text-body-sm">
+<!-- Row 1 (Overdue) -->
+<tr class="hover:bg-[#F0FDF4] transition-colors duration-200 group">
+<td class="py-3 px-4">
+<div class="flex items-center gap-3">
+<div class="w-8 h-10 rounded shadow-sm bg-slate-200 overflow-hidden shrink-0">
+<img alt="1984 Cover" class="w-full h-full object-cover" data-alt="A minimalist book cover for '1984' featuring a bold, graphic eye motif in stark black and white. The design is sleek and modern, perfectly fitting a high-end digital catalog interface. Soft studio lighting enhances the subtle texture of the paper." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCqhbXvuCRfrm8G2Ktk6-2-SjmBzJzNoJAzsUYoHxVI0paMD5tssp29dolr2Jhx_Hmmz7iBnJy4ZiyW-N7XoBK7YnplTBBXnuMSa8axjpRdLSvIpPDpIntgyAqGAyCIHofi2gjc11kdFtEzXo4MWJXChs_-52RCKw_Xvp23rDVfMsSDlckQJymUNqDrqwRyP6q0nEEFxD_yizO-hCXHLhz0Qj259Vkp2ys5MbWeLPy5-XBup-VlLdCt0KVDZtk_4koTq5RVUsEqc12n"/>
+</div>
+<div>
+<p class="font-label-md text-label-md text-on-surface line-clamp-1">1984</p>
+<p class="text-xs text-outline-variant">George Orwell</p>
+</div>
+</div>
+</td>
+<td class="py-3 px-4 text-on-surface">Sarah Jenkins</td>
+<td class="py-3 px-4 text-on-surface">Oct 12, 2023</td>
+<td class="py-3 px-4">
+<span class="inline-flex items-center px-2 py-1 rounded-md text-xs font-medium bg-red-50 text-error">
+                                                Overdue
+                                            </span>
+</td>
+<td class="py-3 px-4 text-right">
+<button class="px-3 py-1.5 rounded border border-slate-200 text-slate-600 hover:text-error hover:border-error transition-colors font-label-sm text-label-sm bg-white shadow-sm">
+                                                Remind
+                                            </button>
+</td>
+</tr>
+<!-- Row 2 (On Time) -->
+<tr class="hover:bg-[#F0FDF4] transition-colors duration-200 group">
+<td class="py-3 px-4">
+<div class="flex items-center gap-3">
+<div class="w-8 h-10 rounded shadow-sm bg-slate-200 overflow-hidden shrink-0">
+<img alt="Sapiens Cover" class="w-full h-full object-cover" data-alt="A modern book cover for 'Sapiens'. The cover features an elegant, abstract representation of human evolution using simple geometric shapes in earth tones. It is presented in a clean, digital format suitable for a minimalist library dashboard. Bright, natural lighting." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDm7cflEhLABKcv-67PywgCTJRQRA5tRJL-jPCH6FruYWk1q3yMy1ptjGvwKQKGjqkkeLpY5w1zDuhEziXCwmGigUV_M8CeXFYCtfJ-tARwNJAi9rYptLJSBeZ8-6qyulmYN-tGrelm63jQIacRVyXYrToxikonQpMm2XqJ_RVjrxVLZMT4FoYSoTSKU2owqmpqoTpOcZf_QtpUYUQcaNgmOI2ygE_BCOlLUsLmR29l8uIBsBrx5XPt7i3L0lsmtQfTXUbOvnF7mKzV"/>
+</div>
+<div>
+<p class="font-label-md text-label-md text-on-surface line-clamp-1">Sapiens</p>
+<p class="text-xs text-outline-variant">Yuval Noah Harari</p>
+</div>
+</div>
+</td>
+<td class="py-3 px-4 text-on-surface">Michael Chang</td>
+<td class="py-3 px-4 text-on-surface">Oct 28, 2023</td>
+<td class="py-3 px-4">
+<span class="inline-flex items-center px-2 py-1 rounded-md text-xs font-medium bg-indigo-50 text-secondary">
+                                                Borrowed
+                                            </span>
+</td>
+<td class="py-3 px-4 text-right">
+<button class="w-8 h-8 rounded text-outline-variant hover:text-primary transition-colors inline-flex items-center justify-center opacity-0 group-hover:opacity-100">
+<span class="material-symbols-outlined text-sm">more_horiz</span>
+</button>
+</td>
+</tr>
+<!-- Row 3 (On Time) -->
+<tr class="hover:bg-[#F0FDF4] transition-colors duration-200 group">
+<td class="py-3 px-4">
+<div class="flex items-center gap-3">
+<div class="w-8 h-10 rounded shadow-sm bg-slate-200 overflow-hidden shrink-0">
+<img alt="Design of Everyday Things Cover" class="w-full h-full object-cover" data-alt="A clean, typographic book cover for 'The Design of Everyday Things'. It features bold, minimalist sans-serif text against a crisp white background with a subtle red accent line. The image is rendered with soft studio lighting, creating a highly professional and modern look." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDqPrbk59VzwoWCoJBIg7dzC2S59Cgw36_7W36d6qynhOr7P108EEtblpm4XcEfgleBcAZr-LF9uT428imXFkF2IQsDC9VWkzrbwwvjBDXCneA9oIkY1pXgCK5IUL76MfsNrW7V4_yhGqjhoL1Z6G-dR-hdKXjo3JoYjbEakMv41N2wgYM1M573N3BtpsBr3rXjNU-QNvzoubJjCdVg0k_wWQx0yLP4z8BF1elTBuGHon9jPkThyTzQmfGubibNvqKepp-IGT7G1z0S"/>
+</div>
+<div>
+<p class="font-label-md text-label-md text-on-surface line-clamp-1">The Design of Everyday Things</p>
+<p class="text-xs text-outline-variant">Don Norman</p>
+</div>
+</div>
+</td>
+<td class="py-3 px-4 text-on-surface">Emma Wilson</td>
+<td class="py-3 px-4 text-on-surface">Nov 02, 2023</td>
+<td class="py-3 px-4">
+<span class="inline-flex items-center px-2 py-1 rounded-md text-xs font-medium bg-indigo-50 text-secondary">
+                                                Borrowed
+                                            </span>
+</td>
+<td class="py-3 px-4 text-right">
+<button class="w-8 h-8 rounded text-outline-variant hover:text-primary transition-colors inline-flex items-center justify-center opacity-0 group-hover:opacity-100">
+<span class="material-symbols-outlined text-sm">more_horiz</span>
+</button>
+</td>
+</tr>
+<!-- Row 4 (Returned - History context) -->
+<tr class="hover:bg-[#F0FDF4] transition-colors duration-200 group">
+<td class="py-3 px-4">
+<div class="flex items-center gap-3">
+<div class="w-8 h-10 rounded shadow-sm bg-slate-200 overflow-hidden shrink-0 opacity-60">
+<img alt="To Kill a Mockingbird Cover" class="w-full h-full object-cover" data-alt="A subdued, classic book cover for 'To Kill a Mockingbird' featuring a simple silhouette of a bird on a bare branch against a muted teal background. The cover is shown in a modern digital interface context with soft, bright lighting." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAOW2w0kdz_7shBYrjtIn25e8ynnYz-myHnE4bD_E7uNS6VUCBQlD0zogmowE0LBZ14C0OdlC_a64btK5PZEUUSEfU0oMKF1ge-57IuY7PlUSiKpeDwzNLMO0Tyiy-wgAkI4VYSB5UzlCNcX8hQ1rjWRiEvSFx-Jn7RHSe-IoJkUFrJI76sojgVrXE-_ElExXgfiTdvV03qw19CHr2AwgCKMUfvbu5tM4musJhRGxOVuayj_h2EpdcHQ0gZBHwFYpcGuZobU8xQG1ma"/>
+</div>
+<div class="opacity-60">
+<p class="font-label-md text-label-md text-on-surface line-clamp-1">To Kill a Mockingbird</p>
+<p class="text-xs text-outline-variant">Harper Lee</p>
+</div>
+</div>
+</td>
+<td class="py-3 px-4 text-on-surface opacity-60">David Kim</td>
+<td class="py-3 px-4 text-on-surface opacity-60">Oct 20, 2023</td>
+<td class="py-3 px-4">
+<span class="inline-flex items-center px-2 py-1 rounded-md text-xs font-medium bg-slate-100 text-slate-500">
+                                                Returned
+                                            </span>
+</td>
+<td class="py-3 px-4 text-right">
+<button class="w-8 h-8 rounded text-outline-variant hover:text-primary transition-colors inline-flex items-center justify-center opacity-0 group-hover:opacity-100">
+<span class="material-symbols-outlined text-sm">more_horiz</span>
+</button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="bg-slate-50 px-4 py-3 border-t border-slate-200 flex justify-center">
+<a class="font-label-sm text-label-sm text-primary hover:underline" href="#">View full history</a>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- Mobile Bottom Navigation (Visible only on small screens) -->
+<nav class="md:hidden fixed bottom-0 w-full bg-surface border-t border-outline-variant pb-safe z-50">
+<div class="flex justify-around items-center h-16">
+<a class="flex flex-col items-center justify-center w-full h-full text-primary" href="#">
+<span class="material-symbols-outlined icon-fill">dashboard</span>
+<span class="text-[10px] font-medium mt-1">Dashboard</span>
+</a>
+<a class="flex flex-col items-center justify-center w-full h-full text-outline-variant hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined">menu_book</span>
+<span class="text-[10px] font-medium mt-1">Books</span>
+</a>
+<div class="relative w-full flex justify-center">
+<button class="absolute -top-6 bg-primary text-white w-12 h-12 rounded-full flex items-center justify-center shadow-lg hover:bg-[#005a3c] transition-colors">
+<span class="material-symbols-outlined">add</span>
+</button>
+</div>
+<a class="flex flex-col items-center justify-center w-full h-full text-outline-variant hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined">swap_horiz</span>
+<span class="text-[10px] font-medium mt-1">Loans</span>
+</a>
+<a class="flex flex-col items-center justify-center w-full h-full text-outline-variant hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="text-[10px] font-medium mt-1">Settings</span>
+</a>
+</div>
+</nav>
+</body></html>
