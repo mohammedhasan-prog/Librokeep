@@ -5,14 +5,34 @@ const {
   updateBookSchema,
   patchBookSchema,
   bookIdParamsSchema,
+  booksQuerySchema,
 } = require("../validation/books");
-const { validateBody, validateParams } = require("../middleware/validate");
+const {
+  validateBody,
+  validateParams,
+  validateQuery,
+} = require("../middleware/validate");
 
 const router = express.Router();
 
-router.get("/", async (req, res, next) => {
+router.get("/", validateQuery(booksQuerySchema), async (req, res, next) => {
   try {
-    const books = await Book.find().sort({ createdAt: -1 });
+    const { title, author, genre } = req.query;
+    const filter = {};
+
+    if (title) {
+      filter.title = { $regex: title, $options: "i" };
+    }
+
+    if (author) {
+      filter.author = { $regex: author, $options: "i" };
+    }
+
+    if (genre) {
+      filter.genre = { $regex: genre, $options: "i" };
+    }
+
+    const books = await Book.find(filter).sort({ createdAt: -1 });
     res.status(200).json(books);
   } catch (err) {
     next(err);

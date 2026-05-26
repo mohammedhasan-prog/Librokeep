@@ -29,9 +29,16 @@ const bookIdParamsSchema = z.object({
   id: objectIdSchema,
 });
 
+const booksQuerySchema = z.object({
+  title: z.string().min(1).max(100).optional(),
+  author: z.string().min(1).max(100).optional(),
+  genre: z.string().min(1).max(100).optional(),
+});
+
 module.exports = {
   createBookSchema,
   updateBookSchema,
   patchBookSchema,
   bookIdParamsSchema,
+  booksQuerySchema,
 };

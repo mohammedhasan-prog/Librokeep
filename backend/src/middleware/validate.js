@@ -20,5 +20,6 @@ const validate = (schema, source) => (req, res, next) => {
 
 const validateBody = (schema) => validate(schema, "body");
 const validateParams = (schema) => validate(schema, "params");
+const validateQuery = (schema) => validate(schema, "query");
 
-module.exports = { validateBody, validateParams };
+module.exports = { validateBody, validateParams, validateQuery };
