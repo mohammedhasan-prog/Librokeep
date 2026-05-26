@@ -18,6 +18,9 @@ const router = express.Router();
 router.get("/", validateQuery(booksQuerySchema), async (req, res, next) => {
   try {
     const { title, author, genre } = req.query;
+    const page = req.query.page || 1;
+    const limit = req.query.limit || 20;
+    const skip = (page - 1) * limit;
     const filter = {};
 
     if (title) {
@@ -32,8 +35,23 @@ router.get("/", validateQuery(booksQuerySchema), async (req, res, next) => {
       filter.genre = { $regex: genre, $options: "i" };
     }
 
-    const books = await Book.find(filter).sort({ createdAt: -1 });
-    res.status(200).json(books);
+    const [books, total] = await Promise.all([
+      Book.find(filter)
+        .sort({ createdAt: -1 })
+        .skip(skip)
+        .limit(limit),
+      Book.countDocuments(filter),
+    ]);
+
+    res.status(200).json({
+      data: books,
+      pagination: {
+        page,
+        limit,
+        total,
+        totalPages: Math.ceil(total / limit),
+      },
+    });
   } catch (err) {
     next(err);
   }

@@ -33,6 +33,8 @@ const booksQuerySchema = z.object({
   title: z.string().min(1).max(100).optional(),
   author: z.string().min(1).max(100).optional(),
   genre: z.string().min(1).max(100).optional(),
+  page: z.coerce.number().int().min(1).max(1000).optional(),
+  limit: z.coerce.number().int().min(1).max(100).optional(),
 });
 
 module.exports = {
