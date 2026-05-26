@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import styles from "./App.module.css";
 import { fetchBooks, createBook, deleteBook, fetchMembers, fetchLoans } from "./services/api";
+import BookDetails from "./BookDetails";
 
 function App() {
   const [modalOpen, setModalOpen] = useState(false);
@@ -13,6 +14,7 @@ function App() {
   const [searchQuery, setSearchQuery] = useState("");
   const [loanFilterStatus, setLoanFilterStatus] = useState("All");
   const [totalBooks, setTotalBooks] = useState(0);
+  const [selectedBookId, setSelectedBookId] = useState(null);
   const dateLabel = useMemo(() => {
     const hours = new Date().getHours();
     if (hours < 12) return "Good morning";
@@ -90,7 +92,8 @@ function App() {
     }
   };
 
-  const handleDeleteBook = async (id) => {
+  const handleDeleteBook = async (id, e) => {
+    if (e) e.stopPropagation();
     if (!window.confirm("Are you sure you want to delete this book?")) return;
     try {
       setLoading(true);
@@ -201,7 +204,13 @@ function App() {
           </div>
         </header>
 
-        <main className={styles.main}>
+        {selectedBookId ? (
+          <BookDetails 
+            bookId={selectedBookId} 
+            onBack={() => setSelectedBookId(null)} 
+          />
+        ) : (
+          <main className={styles.main}>
           <section className={styles.welcome}>
             <h1>
               {dateLabel}, Alex
@@ -254,7 +263,12 @@ function App() {
                 {!loading &&
                   !error &&
                   acquisitions.map((book) => (
-                    <article key={book._id} className={styles.bookCard}>
+                    <article 
+                      key={book._id} 
+                      className={styles.bookCard}
+                      onClick={() => setSelectedBookId(book._id)}
+                      style={{ cursor: "pointer" }}
+                    >
                       <div className={styles.bookCover}>
                         <img src={book.cover} alt={`${book.title} cover`} />
                       </div>
@@ -266,7 +280,7 @@ function App() {
                           </div>
                           <button 
                             className={styles.ghostButton} 
-                            onClick={() => handleDeleteBook(book._id)}
+                            onClick={(e) => handleDeleteBook(book._id, e)}
                             style={{ color: 'var(--color-rose-600)', padding: '4px' }}
                             title="Delete Book"
                           >
@@ -358,6 +372,7 @@ function App() {
             </div>
           </section>
         </main>
+        )}
       </div>
 
       {modalOpen && (

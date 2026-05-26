@@ -21,22 +21,28 @@ app.get("/health", (req, res) => {
   res.status(200).json({ status: "ok" });
 });
 
-app.use("/books", booksRouter);
-app.use("/members", membersRouter);
-app.use("/loans", loansRouter);
+app.use("/api/books", booksRouter);
+app.use("/api/members", membersRouter);
+app.use("/api/loans", loansRouter);
 
 app.use(notFound);
 app.use(errorHandler);
 
 const PORT = process.env.PORT || 4000;
 
+// Connect to DB immediately for serverless cache, but also handle local listening
 connectDB()
   .then(() => {
-    app.listen(PORT, () => {
-      console.log(`Server running on port ${PORT}`);
-    });
+    // Only listen on a port if we are NOT in a Vercel serverless environment
+    if (process.env.NODE_ENV !== "production" && !process.env.VERCEL) {
+      app.listen(PORT, () => {
+        console.log(`Server running on port ${PORT}`);
+      });
+    }
   })
   .catch((err) => {
     console.error("Failed to connect to MongoDB:", err.message);
-    process.exit(1);
   });
+
+// Export the app for Vercel Serverless Functions
+module.exports = app;

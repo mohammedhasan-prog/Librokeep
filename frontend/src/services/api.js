@@ -1,4 +1,4 @@
-const API_BASE = import.meta.env.VITE_API_URL || "http://localhost:4000";
+const API_BASE = import.meta.env.PROD ? "/api" : (import.meta.env.VITE_API_URL || "http://localhost:4000/api");
 
 export const fetchBooks = async ({ page = 1, limit = 12 } = {}) => {
   const response = await fetch(
@@ -9,6 +9,14 @@ export const fetchBooks = async ({ page = 1, limit = 12 } = {}) => {
     throw new Error("Failed to fetch books");
   }
 
+  return response.json();
+};
+
+export const fetchBookById = async (id) => {
+  const response = await fetch(`${API_BASE}/books/${id}`);
+  if (!response.ok) {
+    throw new Error("Failed to fetch book details");
+  }
   return response.json();
 };
 
