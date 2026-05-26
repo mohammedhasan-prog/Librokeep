@@ -207,7 +207,10 @@ function App() {
         {selectedBookId ? (
           <BookDetails 
             bookId={selectedBookId} 
-            onBack={() => setSelectedBookId(null)} 
+            onBack={() => {
+              setSelectedBookId(null);
+              loadData();
+            }} 
           />
         ) : (
           <main className={styles.main}>
