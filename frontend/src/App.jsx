@@ -1,8 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import styles from "./App.module.css";
-import { fetchBooks, createBook, deleteBook } from "./services/api";
-
-const loans = [
+import { fetchBooks, createBook, deleteBook, fetchMembers, fetchLoans } from "./services/api";
   {
     title: "1984",
     author: "George Orwell",
@@ -30,14 +28,13 @@ const loans = [
     borrower: "David Kim",
     due: "Oct 20, 2023",
     status: "Returned",
-  },
-];
-
 function App() {
   const [modalOpen, setModalOpen] = useState(false);
   const [books, setBooks] = useState([]);
-  const [booksLoading, setBooksLoading] = useState(true);
-  const [booksError, setBooksError] = useState("");
+  const [members, setMembers] = useState([]);
+  const [loans, setLoans] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
   const [totalBooks, setTotalBooks] = useState(0);
   const dateLabel = useMemo(() => {
     const hours = new Date().getHours();
@@ -56,24 +53,24 @@ function App() {
       },
       {
         label: "Currently Borrowed",
-        value: "84",
+        value: loans.filter(l => l.status === "Borrowed" || l.status === "Overdue").length.toString(),
         icon: "swap_horiz",
         tone: "indigo",
       },
       {
         label: "Overdue Returns",
-        value: "12",
+        value: loans.filter(l => l.status === "Overdue").length.toString(),
         icon: "event_busy",
         tone: "rose",
       },
       {
         label: "Active Members",
-        value: "156",
+        value: members.length.toString(),
         icon: "group",
         tone: "sky",
       },
     ],
-    [totalBooks]
+    [totalBooks, loans, members]
   );
 
   const acquisitions = useMemo(
@@ -90,61 +87,60 @@ function App() {
     e.preventDefault();
     const formData = new FormData(e.target);
     try {
-      setBooksLoading(true);
+      setLoading(true);
       await createBook(formData);
       setModalOpen(false);
-      const payload = await fetchBooks({ page: 1, limit: 12 });
-      const data = payload.data || payload;
-      setBooks(data);
-      setTotalBooks(payload.pagination?.total ?? data.length);
+      await loadData();
     } catch (error) {
       console.error(error);
       alert("Failed to add book");
     } finally {
-      setBooksLoading(false);
+      setLoading(false);
     }
   };
 
   const handleDeleteBook = async (id) => {
     if (!window.confirm("Are you sure you want to delete this book?")) return;
     try {
-      setBooksLoading(true);
+      setLoading(true);
       await deleteBook(id);
-      const payload = await fetchBooks({ page: 1, limit: 12 });
-      const data = payload.data || payload;
-      setBooks(data);
-      setTotalBooks(payload.pagination?.total ?? data.length);
+      await loadData();
     } catch (error) {
       console.error(error);
       alert("Failed to delete book");
     } finally {
-      setBooksLoading(false);
+      setLoading(false);
+    }
+  };
+
+  const loadData = async () => {
+    try {
+      setError("");
+      const [booksPayload, membersData, loansData] = await Promise.all([
+        fetchBooks({ page: 1, limit: 12 }),
+        fetchMembers(),
+        fetchLoans(),
+      ]);
+      const data = booksPayload.data || booksPayload;
+      setBooks(data);
+      setTotalBooks(booksPayload.pagination?.total ?? data.length);
+      setMembers(membersData);
+      setLoans(loansData);
+    } catch (err) {
+      setError("Failed to load dashboard data. Please try again.");
     }
   };
 
   useEffect(() => {
     let isMounted = true;
-
-    const loadBooks = async () => {
-      try {
-        setBooksLoading(true);
-        setBooksError("");
-        const payload = await fetchBooks({ page: 1, limit: 12 });
-        if (!isMounted) return;
-        const data = payload.data || payload;
-        setBooks(data);
-        setTotalBooks(payload.pagination?.total ?? data.length);
-      } catch (error) {
-        if (!isMounted) return;
-        setBooksError("Failed to load books. Please try again.");
-      } finally {
-        if (isMounted) {
-          setBooksLoading(false);
-        }
-      }
+    
+    const initData = async () => {
+      setLoading(true);
+      await loadData();
+      if (isMounted) setLoading(false);
     };
-
-    loadBooks();
+    
+    initData();
 
     return () => {
       isMounted = false;
@@ -276,17 +272,17 @@ function App() {
                 </button>
               </div>
               <div className={styles.bookGrid}>
-                {booksLoading && (
+                {loading && (
                   <p className={styles.statusMessage}>Loading books...</p>
                 )}
-                {!booksLoading && booksError && (
-                  <p className={styles.statusMessage}>{booksError}</p>
+                {!loading && error && (
+                  <p className={styles.statusMessage}>{error}</p>
                 )}
-                {!booksLoading && !booksError && acquisitions.length === 0 && (
+                {!loading && !error && acquisitions.length === 0 && (
                   <p className={styles.statusMessage}>No books yet.</p>
                 )}
-                {!booksLoading &&
-                  !booksError &&
+                {!loading &&
+                  !error &&
                   acquisitions.map((book) => (
                     <article key={book._id} className={styles.bookCard}>
                       <div className={styles.bookCover}>
@@ -348,15 +344,15 @@ function App() {
                   </thead>
                   <tbody>
                     {loans.map((loan) => (
-                      <tr key={`${loan.title}-${loan.borrower}`}>
+                      <tr key={loan._id}>
                         <td>
                           <div className={styles.titleCell}>
-                            <strong>{loan.title}</strong>
-                            <span>{loan.author}</span>
+                            <strong>{loan.book?.title || "Unknown Book"}</strong>
+                            <span>{loan.book?.author || "Unknown Author"}</span>
                           </div>
                         </td>
-                        <td>{loan.borrower}</td>
-                        <td>{loan.due}</td>
+                        <td>{loan.member?.name || "Unknown Member"}</td>
+                        <td>{new Date(loan.dueDate).toLocaleDateString()}</td>
                         <td>
                           <span
                             className={

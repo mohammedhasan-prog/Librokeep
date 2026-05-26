@@ -46,3 +46,19 @@ export const deleteBook = async (id) => {
   }
   return;
 };
+
+export const fetchMembers = async () => {
+  const response = await fetch(`${API_BASE}/members`);
+  if (!response.ok) {
+    throw new Error("Failed to fetch members");
+  }
+  return response.json();
+};
+
+export const fetchLoans = async () => {
+  const response = await fetch(`${API_BASE}/loans`);
+  if (!response.ok) {
+    throw new Error("Failed to fetch loans");
+  }
+  return response.json();
+};

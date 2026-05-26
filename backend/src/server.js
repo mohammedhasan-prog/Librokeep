@@ -6,6 +6,8 @@ require("dotenv").config();
 
 const connectDB = require("./config/db");
 const booksRouter = require("./routes/books");
+const membersRouter = require("./routes/members");
+const loansRouter = require("./routes/loans");
 const { notFound, errorHandler } = require("./middleware/errorHandler");
 
 const app = express();
@@ -20,6 +22,8 @@ app.get("/health", (req, res) => {
 });
 
 app.use("/books", booksRouter);
+app.use("/members", membersRouter);
+app.use("/loans", loansRouter);
 
 app.use(notFound);
 app.use(errorHandler);
