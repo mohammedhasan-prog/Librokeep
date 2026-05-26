@@ -44,7 +44,12 @@ export const updateBook = async (id, formData) => {
   });
 
   if (!response.ok) {
-    throw new Error("Failed to update book");
+    let errMessage = "Failed to update book";
+    try {
+      const data = await response.json();
+      if (data.message) errMessage = data.message;
+    } catch (e) {}
+    throw new Error(errMessage);
   }
   return response.json();
 };
